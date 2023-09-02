@@ -1,4 +1,6 @@
 import { newMessage } from '../utils/utils.js'
+import { fileURLToPath } from 'url'
+
 export function isUser (req, res, next) {
   if (req.session?.user?.email) {
     return next()
@@ -38,6 +40,6 @@ export async function isYourCart (req, res, next) {
       return res.status(403).render('error', { error: 'error de autorización! Este no es tu carrito' })
     }
   } catch (e) {
-    return newMessage('failure', 'Failed to identify if this cart is yours', e)
+    return newMessage('failure', 'Failed to identify if this cart is yours', e.toString(), fileURLToPath(import.meta.url))
   }
 }

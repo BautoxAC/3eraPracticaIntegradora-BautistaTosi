@@ -1,5 +1,6 @@
 import { UserManagerDBDAO } from '../DAO/DB/userManagerDB.dao.js'
 import { newMessage } from '../utils/utils.js'
+import { fileURLToPath } from 'url'
 const UserManagerDB = new UserManagerDBDAO()
 export class UserManagerDBService {
   async addUsser (userPassword, userName) {
@@ -7,7 +8,7 @@ export class UserManagerDBService {
       const user = UserManagerDB.addUsser(userPassword, userName)
       return newMessage('success', 'user Created successfully', user)
     } catch (e) {
-      return newMessage('failure', 'Failed to create a user', e)
+      return newMessage('failure', 'Failed to create a user', e.toString(), fileURLToPath(import.meta.url))
     }
   }
 
@@ -16,7 +17,7 @@ export class UserManagerDBService {
       const user = await UserManagerDB.getUserByUserName(userName)
       return newMessage('success', 'user Found successfully', user)
     } catch (e) {
-      return newMessage('failure', 'Failed to find a user', e)
+      return newMessage('failure', 'Failed to find a user', e.toString(), fileURLToPath(import.meta.url))
     }
   }
 }

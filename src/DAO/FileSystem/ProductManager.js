@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { newMessage } from '../../utils/utils.js'
 import { v4 as uuidv4 } from 'uuid'
-
+import { fileURLToPath } from 'url'
 export class ProductManager {
   constructor (path) {
     if (!fs.existsSync(path)) {
@@ -27,9 +27,9 @@ export class ProductManager {
     }
     const codeVerificator = this.products.find((productToFind) => productToFind.code === code)
     if (codeVerificator) {
-      return newMessage('failure', 'Error, the code is repeated', '')
+      return newMessage('failure', 'Error, the code is repeated', '' , fileURLToPath(import.meta.url))
     } else if (!addPro) {
-      return newMessage('failure', 'Error, data is incomplete please provide more data and the stock and the price must be numbers', '')
+      return newMessage('failure', 'Error, data is incomplete please provide more data and the stock and the price must be numbers', '', fileURLToPath(import.meta.url))
     } else {
       this.products.push({ ...product, id, status: true })
       await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, 2))
@@ -45,7 +45,7 @@ export class ProductManager {
     const dataTypes = Object.entries(productToUpdate).map((prop) => ({ key: prop[0], type: prop[0] === 'thumbnails' ? 'string' : typeof (prop[1]) }))
     const messages = []
     if (!productToUpdate || Array.isArray(propsReceivedToUpdate)) {
-      return newMessage('failure', 'The product was not found or the data is an Array', '')
+      return newMessage('failure', 'The product was not found or the data is an Array', '', fileURLToPath(import.meta.url))
     }
     const propToUpdateFound = valuesRecieved.map((prop) => {
       const status = valuesToUpdate.some((propUpdate) => prop[0] === propUpdate && prop[0] !== 'id' && prop[0] !== 'status')
@@ -80,7 +80,7 @@ export class ProductManager {
     if (productFindId) {
       return newMessage('success', 'Found successfully', productFindId)
     } else {
-      return newMessage('failure', 'Not Found', '')
+      return newMessage('failure', 'Not Found', '', fileURLToPath(import.meta.url))
     }
   }
 
@@ -107,7 +107,7 @@ export class CartManager {
     if (cartFindId) {
       return newMessage('success', 'Found successfully', cartFindId.productos)
     } else {
-      return newMessage('failure', 'Not Found', '')
+      return newMessage('failure', 'Not Found', '', fileURLToPath(import.meta.url))
     }
   }
 
@@ -126,11 +126,11 @@ export class CartManager {
     const listProducts = new ProductManager('src/public/products.json')
     const cart = this.carts.find(cartToFind => cartToFind.idCarrito === idCart)
     if (!cart) {
-      return newMessage('failure', 'cart not found', '')
+      return newMessage('failure', 'cart not found', '', fileURLToPath(import.meta.url))
     }
     const product = listProducts.getProductById(idProduct).data
     if (!product) {
-      return newMessage('failure', 'product not found', '')
+      return newMessage('failure', 'product not found', '', fileURLToPath(import.meta.url))
     }
     const productRepeated = cart.productos.find(pro => pro.idProduct === product.id)
     let messageReturn = {}
@@ -140,7 +140,7 @@ export class CartManager {
         cart.productos[positionProductRepeated].quantity++
         messageReturn = newMessage('success', 'Product repeated: quantity added correctly', cart)
       } else {
-        messageReturn = newMessage('failure', 'Product repeated: quantity is iqual to the stock', cart)
+        messageReturn = newMessage('failure', 'Product repeated: quantity is iqual to the stock', cart, fileURLToPath(import.meta.url))
       }
     } else {
       cart.productos.push({ idProduct: product.id, quantity: 1 })

@@ -3,6 +3,7 @@ import { ChatManagerDBDAO } from '../DAO/DB/chatManagerDB.dao.js'
 import { UserManagerDBDAO } from '../DAO/DB/userManagerDB.dao.js'
 import { CustomError } from './errors/custom-error.js'
 import { EErros } from './errors/enums.js'
+import { fileURLToPath } from 'url'
 const UserManagerDB = new UserManagerDBDAO()
 const ChatManagerDB = new ChatManagerDBDAO()
 export class ChatManagerDBService {
@@ -19,10 +20,10 @@ export class ChatManagerDBService {
           message: 'Error the message could not be sent the user was not found ',
           code: EErros.INCORRECT_CREDENTIALS_ERROR
         })
-        return newMessage('failure', 'The user was not foud', '')
+        return newMessage('failure', 'The user was not foud', '', fileURLToPath(import.meta.url))
       }
     } catch (e) {
-      return newMessage('failure', 'an error ocurred', e)
+      return newMessage('failure', 'an error ocurred', e.toString(), fileURLToPath(import.meta.url))
     }
   }
 
@@ -31,7 +32,7 @@ export class ChatManagerDBService {
       const messages = await ChatManagerDB.getMessages()
       return newMessage('success', 'Messages got', messages)
     } catch (e) {
-      return newMessage('failure', 'Messages not found', e)
+      return newMessage('failure', 'Messages not found', e.toString(), fileURLToPath(import.meta.url))
     }
   }
 }
