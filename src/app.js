@@ -9,9 +9,9 @@ import { errorHandler } from './middlewares/error.js'
 import { loggerTestRouter } from './routes/loggerTest.router.js'
 import { mockingProducts } from './routes/mockingProducts.router.js'
 import { cartsAPIRouter } from './routes/cartsAPI.router.js'
+import { userRouter } from './routes/userAPI.router.js'
 import { productViewRouter } from './routes/productsView.router.js'
 import { productsAPIRouter } from './routes/productsAPI.router.js'
-import { productsSocketRouter } from './routes/productsSocketRouter.router.js'
 import { authRouter } from './routes/auth.router.js'
 import { __dirname } from './utils/__dirname.js'
 import { connectMongo, connectSocketServer } from './utils/utils.js'
@@ -61,6 +61,7 @@ connectMongo()
 app.use('/api/products', productsAPIRouter)
 app.use('/api/carts', cartsAPIRouter)
 app.use('/api/sessions', sessionsRouter)
+app.use('/api/users', userRouter)
 app.use('/loggerTest', loggerTestRouter)
 
 // Rutes: HTML/HandleBars
@@ -70,7 +71,6 @@ app.use('/carts', cartViewRouter)
 app.use('/auth', authRouter)
 
 // Rutes: SOCKETS
-app.use('/realtimeproducts', productsSocketRouter)
 app.use('/chat', chatRouter)
 
 // Error Handler

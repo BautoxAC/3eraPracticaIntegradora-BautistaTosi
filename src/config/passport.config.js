@@ -4,6 +4,7 @@ import passport from 'passport'
 import local from 'passport-local'
 import { newMessage, createHash, isValidPassword } from '../utils/utils.js'
 import { CartManagerDBService } from '../services/carts.service.js'
+import { fileURLToPath } from 'url'
 import config from './env.config.js'
 import { EErros } from '../services/errors/enums.js'
 import { CustomError } from '../services/errors/custom-error.js'
@@ -37,14 +38,9 @@ export function iniPassPortLocalAndGithub () {
         }
         newMessage('success', 'success in logging with passport(the user alredy exists)', {})
         return done(null, user)
-      } catch (err) {
-        CustomError.createError({
-          name: 'Logging a user Error',
-          cause: 'error in logging with passport local',
-          message: 'Error to log a user',
-          code: EErros.DATABASES_ERROR
-        })
-        return done(err)
+      } catch (e) {
+        newMessage('failure', 'Failed to find a user', e.toString(), fileURLToPath(import.meta.url))
+        return done(e)
       }
     })
   )
@@ -84,12 +80,7 @@ export function iniPassPortLocalAndGithub () {
           newMessage('success', 'success in registering with passport', {})
           return done(null, userCreated)
         } catch (e) {
-          CustomError.createError({
-            name: 'Registering a user Error',
-            cause: 'error in registering with passport local',
-            message: 'Error to register a user',
-            code: EErros.DATABASES_ERROR
-          })
+          newMessage('failure', 'Failed to find a user', e.toString(), fileURLToPath(import.meta.url))
           return done(e)
         }
       }
@@ -145,12 +136,7 @@ export function iniPassPortLocalAndGithub () {
             return done(null, user)
           }
         } catch (e) {
-          CustomError.createError({
-            name: 'Logging a user Error',
-            cause: 'error in logging with passport github',
-            message: 'Error to log a user',
-            code: EErros.DATABASES_ERROR
-          })
+          newMessage('failure', 'Failed to find a user', e.toString(), fileURLToPath(import.meta.url))
           return done(e)
         }
       }

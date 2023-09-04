@@ -1,5 +1,7 @@
 import { ProductManagerDBService } from '../services/products.service.js'
+import { UserManagerDBService } from '../services/user.service.js'
 import config from './../config/env.config.js'
+const UserManager = new UserManagerDBService()
 const { port } = config
 const list = new ProductManagerDBService()
 export class ProductViewController {
@@ -7,9 +9,15 @@ export class ProductViewController {
     const url = `http://localhost:${port}/products`
     const { limit, page, query, sort } = req.query
     const { email, role, cart } = req.session.user
-    const isAdmin = role === 'Admin'
+    const userId = await UserManager.getUserByUserName(email)
     const pageInfo = await list.getProducts(limit, page, query, sort, url)
-    return res.status(200).render('products', { ...pageInfo, email, isAdmin, urlCart: `http://localhost:${port}/carts/${cart}` })
+    return res.status(200).render('products', {
+      ...pageInfo,
+      email,
+      urlCart: `http://localhost:${port}/carts/${cart}`,
+      role,
+      userId: userId.data._id
+    })
   }
 
   async renderDetails (req, res) {

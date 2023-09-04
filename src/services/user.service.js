@@ -20,4 +20,18 @@ export class UserManagerDBService {
       return newMessage('failure', 'Failed to find a user', e.toString(), fileURLToPath(import.meta.url))
     }
   }
+
+  async changerole (updateUser, userId) {
+    try {
+      if (updateUser.role === 'user') {
+        updateUser.role = 'premium'
+      } else {
+        updateUser.role = 'user'
+      }
+      await UserManagerDB.changeRole(userId, updateUser)
+      return updateUser.role
+    } catch (e) {
+      return newMessage('failure', 'Failed to find a user', e.toString(), fileURLToPath(import.meta.url))
+    }
+  }
 }

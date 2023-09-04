@@ -9,7 +9,7 @@ export function isUser (req, res, next) {
 }
 
 export function isAdmin (req, res, next) {
-  if (req.session?.user?.role === 'Admin') {
+  if (req.session?.user?.role === 'admin') {
     return next()
   }
   return res.status(403).render('error', { error: 'error de autorización!' })
@@ -18,14 +18,14 @@ export function isAdmin (req, res, next) {
 export function AdminCredentials (req, res, next) {
   const { email, password } = req.body
   if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-    req.session.user = { email, role: 'Admin' }
+    req.session.user = { email, role: 'admin' }
     return res.redirect('/products')
   }
   return next()
 }
 
 export function isNotAdmin (req, res, next) {
-  if (req.session?.user?.role === 'Admin') {
+  if (req.session?.user?.role === 'admin') {
     return res.status(403).render('error', { error: 'error de autorización!' })
   }
   return next()

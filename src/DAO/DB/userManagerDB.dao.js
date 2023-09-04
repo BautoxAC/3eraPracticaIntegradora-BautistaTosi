@@ -64,4 +64,18 @@ export class UserManagerDBDAO {
       })
     }
   }
+
+  async changeRole (userId, updateUser) {
+    try {
+      const user = await userModel.updateOne({ _id: userId }, updateUser).lean()
+      return user
+    } catch (e) {
+      CustomError.createError({
+        name: 'Changing a role Error',
+        cause: 'Failed to change the role the User in DAO (check the data)',
+        message: 'Error to change a role',
+        code: EErros.DATABASES_ERROR
+      })
+    }
+  }
 }

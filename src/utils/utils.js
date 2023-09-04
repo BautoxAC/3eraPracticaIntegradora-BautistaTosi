@@ -3,7 +3,6 @@ import { Server } from 'socket.io'
 import { logger } from './logger.js'
 import { ChatManagerDBService } from '../services/chat.service.js'
 import { CartManagerDBService } from '../services/carts.service.js'
-import { ProductManagerDBService } from '../services/products.service.js'
 import { UserManagerDBService } from '../services/user.service.js'
 import config from '../config/env.config.js'
 import { __dirname } from './__dirname.js'
@@ -50,7 +49,6 @@ export function connectSocketServer (httpServer) {
     console.log('cliente conectado')
     // vista /chat
     const MessageManager = new ChatManagerDBService()
-    const list = new ProductManagerDBService()
     const CartManager = new CartManagerDBService()
     const userManager = new UserManagerDBService()
     socket.on('new_message_front_to_back', async (message, userName) => {
@@ -61,20 +59,6 @@ export function connectSocketServer (httpServer) {
       } catch (e) {
         socket.emit('message_created_back_to_front', newMessage(false, 'an error ocurred', ''))
       }
-    })
-    socket.on('msg_front_to_back', async (data) => {
-      try {
-        const { title, description, price, thumbnails, code, stock } = data.data
-        const category = 'remera'
-        socket.emit('newProduct_to_front', await list.addProduct(title, description, price, thumbnails, code, stock, category), await list.getProducts())
-      } catch (e) {
-        socket.emit('newProduct_to_front', { status: 'failure', message: 'something went wrong :(', data: {} })
-      }
-    })
-    socket.emit('msg_back_to_front_products', await list.getProducts())
-    socket.on('msg_front_to_back_delete_product', async (product) => {
-      await list.deleteProduct(product._id)
-      socket.emit('msg_front_to_back_deleted', await list.getProducts())
     })
     // vista /products
     socket.on('add_product_to_cart_front_to_back', async ({ idProduct, email }) => {
