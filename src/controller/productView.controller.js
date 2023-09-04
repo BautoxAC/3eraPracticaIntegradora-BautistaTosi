@@ -4,7 +4,7 @@ const { port } = config
 const list = new ProductManagerDBService()
 export class ProductViewController {
   async renderAllProducts (req, res) {
-    const url = `http://localhost:${port}/api/products`
+    const url = `http://localhost:${port}/products`
     const { limit, page, query, sort } = req.query
     const { email, role, cart } = req.session.user
     const isAdmin = role === 'Admin'

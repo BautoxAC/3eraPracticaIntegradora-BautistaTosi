@@ -1,5 +1,6 @@
 import { userModel } from '../models/users.model.js'
 import { EErros } from '../../services/errors/enums.js'
+import { createHash, isValidPassword } from '../../utils/utils.js'
 import { CustomError } from '../../services/errors/custom-error.js'
 export class UserManagerDBDAO {
   async addUsser (userPassword, userName) {
@@ -26,6 +27,39 @@ export class UserManagerDBDAO {
         name: 'Getting a user by userName Error',
         cause: 'Failed to find the User in DAO (check the data)',
         message: 'Error to get a user by userName',
+        code: EErros.DATABASES_ERROR
+      })
+    }
+  }
+
+  async recoverPass (newPass, email) {
+    try {
+      const user = await this.getUserByUserName(email)
+      if (user.password === 'nopass') {
+        CustomError.createError({
+          name: 'Recovering a password',
+          cause: 'Failed to find the User in DAO (github)',
+          message: 'Error to get a user by userName(github)',
+          code: EErros.INCORRECT_CREDENTIALS_ERROR
+        })
+      }
+      if (isValidPassword(newPass, user.password)) {
+        CustomError.createError({
+          name: 'Recovering a password',
+          cause: 'Failed to recover the password in DAO (check the data)',
+          message: 'Error to recover a password(password)',
+          code: EErros.DATABASES_ERROR
+        })
+      } else {
+        user.password = createHash(newPass)
+        const userPasswordRecovered = await userModel.updateOne(user).lean()
+        return userPasswordRecovered
+      }
+    } catch (e) {
+      CustomError.createError({
+        name: 'Recovering a password',
+        cause: 'Failed to recover the password in DAO (check the data)',
+        message: e.message,
         code: EErros.DATABASES_ERROR
       })
     }

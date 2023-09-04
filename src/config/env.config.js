@@ -14,5 +14,7 @@ export default {
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   port: process.env.PORT,
-  logWinston: process.env.LOG_WINSTON
+  logWinston: process.env.LOG_WINSTON,
+  mailSender: process.env.GOOGLE_EMAIL,
+  passMailSender: process.env.GOOGLE_PASS
 }

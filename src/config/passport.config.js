@@ -138,11 +138,12 @@ export function iniPassPortLocalAndGithub () {
               cart: newCart.data._id
             }
             const userCreated = await userModel.create(newUser)
+            newMessage('success', 'user logged succesfully with passport github', {})
             return done(null, userCreated)
           } else {
+            newMessage('success', 'user logged succesfully with passport github', {})
             return done(null, user)
           }
-          newMessage('success', 'user logged succesfully with passport github', {})
         } catch (e) {
           CustomError.createError({
             name: 'Logging a user Error',

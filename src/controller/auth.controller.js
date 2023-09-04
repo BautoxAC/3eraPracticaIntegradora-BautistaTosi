@@ -1,3 +1,5 @@
+import { AuthService } from '../services/auth.service.js'
+const authServiceControlling = new AuthService()
 export class AuthController {
   renderLogin (req, res) {
     return res.render('login', {})
@@ -63,5 +65,26 @@ export class AuthController {
 
   getSecret (req, res) {
     return res.send('datos super secretos clasificados sobre los perfiles registrados de la pagina')
+  }
+
+  sendEmail (req, res) {
+    const { email } = req.body
+    const result = authServiceControlling.sendEmail(email)
+    return res.status(200).json(result)
+  }
+
+  renderRecover (req, res) {
+    const { code, email } = req.query
+    return res.render('recoverPass', { code, email })
+  }
+
+  async passRecover (req, res) {
+    const { code: stringCode, email, password: newPass } = req.query
+    const result = await authServiceControlling.passRecover(newPass, stringCode, email)
+    if (result.status === 'failure') {
+      return res.status(400).json(result)
+    } else {
+      return res.status(200).json(result)
+    }
   }
 }

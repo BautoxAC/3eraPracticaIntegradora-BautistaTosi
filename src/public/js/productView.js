@@ -20,7 +20,7 @@ fetch(`http://localhost:${port}/api/products?${queries[1]}`)
   })
   .catch(error => console.log(error))
 socket.on('add_product_to_cart_back_to_front', (data) => {
-  if (data.status === 'success') {
+  if (data.status !== 'failure') {
     alert('producto agregado correctamente')
   } else {
     alert('ha ocurrido un error')
