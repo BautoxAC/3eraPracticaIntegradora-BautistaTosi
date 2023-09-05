@@ -35,7 +35,7 @@ export class CartManagerDBService {
     }
   }
 
-  async addProduct (idCart, idProduct) {
+  async addProduct (idCart, idProduct, owner) {
     try {
       const cart = await CartManagerDAO.getCartById(idCart)
       if (!cart) {
@@ -48,6 +48,14 @@ export class CartManagerDBService {
       }
       let product = await listProducts.getProductById(idProduct)
       product = product.data
+      if (owner === product.owner) {
+        CustomError.createError({
+          name: 'Adding a product to the cart error',
+          cause: 'The product was not addes(owner)',
+          message: 'Error trying to add a product(owner)',
+          code: EErros.INCORRECT_CREDENTIALS_ERROR
+        })
+      }
       if (!product) {
         CustomError.createError({
           name: 'Finding product error',
@@ -142,36 +150,6 @@ export class CartManagerDBService {
       return newMessage('success', 'products emptied', cartFindId)
     } catch (e) {
       return newMessage('failure', 'A problem ocurred', '', fileURLToPath(import.meta.url))
-    }
-  }
-
-  async updateQuantityProduct (idCart, idProduct, quantity) {
-    try {
-      const quantityNumber = Object.values(quantity)
-      if (typeof (quantityNumber[0]) !== 'number') {
-        CustomError.createError({
-          name: 'Updating the product quantity Error',
-          cause: 'the quantity must be a number',
-          message: 'Error the products could not be updated the quantity was not a number',
-          code: EErros.INVALID_TYPES_ERROR
-        })
-      }
-      const cartFindId = await CartManagerDAO.getProductById(idCart)
-      const cartProducts = cartFindId.products
-      const productToUpdate = cartProducts.find(pro => pro.idProduct === idProduct)
-      if (!productToUpdate) {
-        CustomError.createError({
-          name: 'Updating the product quantity Error',
-          cause: 'the product was not found inside the cart',
-          message: 'Error the products could not be updated the product was not found ',
-          code: EErros.INCORRECT_CREDENTIALS_ERROR
-        })
-      }
-      productToUpdate.quantity = quantityNumber[0]
-      await CartManagerDAO.updateQuantityProduct(cartFindId)
-      return newMessage('success', 'the quantity of product was updated', cartFindId)
-    } catch (e) {
-      return newMessage('failure', 'A problem ocurred', e.toString(), fileURLToPath(import.meta.url))
     }
   }
 

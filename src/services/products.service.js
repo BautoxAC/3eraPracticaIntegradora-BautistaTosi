@@ -5,9 +5,12 @@ import { EErros } from './errors/enums.js'
 import { fileURLToPath } from 'url'
 const ProductManagerDAO = new ProductManagerDBDAO()
 export class ProductManagerDBService {
-  async addProduct (title, description, price, thumbnails, code, stock, category) {
+  async addProduct (title, description, price, thumbnails, code, stock, category, owner) {
     try {
-      const product = { title, description, price: Number(price), thumbnails: thumbnails !== undefined && [thumbnails], code, stock: Number(stock), category }
+      if (owner === 'adminCoder@coder.com') {
+        owner = 'admin'
+      }
+      const product = { title, description, price: Number(price), thumbnails: thumbnails !== undefined && [thumbnails], code, stock: Number(stock), category, owner }
       let addPro = true
       const productValues = Object.values(product)
       for (const prop of productValues) {
@@ -127,10 +130,20 @@ export class ProductManagerDBService {
     }
   }
 
-  async deleteProduct (id) {
+  async deleteProduct (id, owner) {
     try {
-      const productToDelete = await ProductManagerDAO.deleteProduct(id)
-      return newMessage('success', 'Deleted successfully', productToDelete)
+      const product = await this.getProductById(id)
+      if (owner === product.data.owner || owner === 'adminCoder@coder.com') {
+        const productToDelete = await ProductManagerDAO.deleteProduct(id)
+        return newMessage('success', 'Deleted successfully', productToDelete)
+      } else {
+        CustomError.createError({
+          name: 'Deleting product error',
+          cause: 'The product was not deleted(owner)',
+          message: 'Error trying to delete product(owner)',
+          code: EErros.INCORRECT_CREDENTIALS_ERROR
+        })
+      }
     } catch (e) {
       return newMessage('failure', 'A problem ocurred', e.toString(), fileURLToPath(import.meta.url))
     }

@@ -15,6 +15,13 @@ export function isAdmin (req, res, next) {
   return res.status(403).render('error', { error: 'error de autorización!' })
 }
 
+export function isPremiumOrAdmin (req, res, next) {
+  if (req.session?.user?.role === 'premium' || req.session?.user?.role === 'admin') {
+    return next()
+  }
+  return res.status(403).render('error', { error: 'error de autorización!' })
+}
+
 export function AdminCredentials (req, res, next) {
   const { email, password } = req.body
   if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {

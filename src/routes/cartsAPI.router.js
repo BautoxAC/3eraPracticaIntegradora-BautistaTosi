@@ -16,6 +16,4 @@ cartsAPIRouter.delete('/:cid', isYourCart, CartsControllerRouting.deleteAllProdu
 
 cartsAPIRouter.put('/:cid', isYourCart, CartsControllerRouting.addNewProducts)
 
-cartsAPIRouter.put('/:cid/products/:pid', isYourCart, CartsControllerRouting.updateQuantityProduct)
-
 cartsAPIRouter.post('/:cid/purchase', isYourCart, CartsControllerRouting.createATicketToBuy)

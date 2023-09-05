@@ -14,7 +14,10 @@ export class CartsController {
   async addProduct (req, res) {
     const idCart = req.params.cid
     const idProduct = req.params.pid
-    return res.status(200).json(await list.addProduct(idCart, idProduct))
+    const owner = req.session.user.email
+    const response = await list.addProduct(idCart, idProduct, owner)
+    const status = response.status !== 'failure' ? 200 : 400
+    return res.status(status).json(response)
   }
 
   async deleteProduct (req, res) {
@@ -32,13 +35,6 @@ export class CartsController {
     const idCart = req.params.cid
     const products = req.body
     return res.status(200).json(await list.addNewProducts(idCart, products))
-  }
-
-  async updateQuantityProduct (req, res) {
-    const idCart = req.params.cid
-    const idProduct = req.params.pid
-    const quantity = req.body
-    return res.status(200).json(await list.updateQuantityProduct(idCart, idProduct, quantity))
   }
 
   async createATicketToBuy (req, res) {

@@ -71,7 +71,6 @@ export function iniPassPortLocalAndGithub () {
             firstName,
             lastName,
             age,
-            isAdmin: false,
             password: createHash(password),
             role: 'user',
             cart: newCart.data._id

@@ -23,10 +23,17 @@ export class ProductsAPIController {
 
   async deleteProduct (req, res) {
     const Id = req.params.pid
-    return res.status(200).json(await list.deleteProduct(Id))
+    const owner = req.session.user.email
+    const response = await list.deleteProduct(Id, owner)
+    const status = response.status === 'success' ? 200 : 400
+    return res.status(status).json(response)
   }
 
-  async addImage (req, res) {
-    res.redirect('/realtimeproducts')
+  async newProduct (req, res) {
+    const newProduct = req.body
+    const owner = req.session.user.email
+    const imageUrl = `http://localhost:${port}/${req.file.originalname}`
+    await list.addProduct(newProduct.title, newProduct.description, newProduct.price, imageUrl, newProduct.code, newProduct.stock, newProduct.category, owner)
+    return res.redirect('/products')
   }
 }

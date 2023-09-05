@@ -11,7 +11,7 @@
     </div>
     <div>
         <a href='/auth/administracion'>Ver datos super secretos</a>
-        <a href='/api/users/premium/{{userId}}' class='role'>Cambia de rol</a>
+        {{#if userId}}<a href='/api/users/premium/{{userId}}' class='role'>Cambia de rol</a>{{/if}}
         <br>
         <br>
         <button><a href='/auth/logout'>Salir!</a></button>
@@ -27,6 +27,9 @@
             <hr>
             <label for='description'>Descripicion:</label>
             <input type='text' id='description' name='description'>
+            <hr>
+            <label for='category'>Categoria:</label>
+            <input type='text' id='category' name='category'>
             <hr>
             <label for='stock'>Stock:</label>
             <input type='number' id='stock' name='stock'>
@@ -46,7 +49,7 @@
 </header>
 <main>
     <h1>LISTADO DE PRODUCTOS:</h1>
-    <ol class='productContainer'>
+    <ol class='productContainer' id="productContainer">
         {{#each payload}}
         <div class='linkDetailContainer'>
             <a href='/products/{{this._id}}' class='detailsLink' id='linkDetail{{this._id}}'>
@@ -57,6 +60,8 @@
                     <p>Dueño:{{this.owner}}</p>
                 </li>
             </a>
+            <button id="buttonEliminate{{this._id}}"><img src="/quitar.png" alt="Eliminar producto"
+                    title="Eliminar producto"></button>
             <button id='agregateOne{{this._id}}' class='CartAgregate'><img src='/AgregaUno.png'
                     alt='Agrega uno al carrito' title='Agrega uno al carrito'></button>
         </div>
@@ -72,5 +77,4 @@
     <a href='{{nextLink}}'>{{nextPage}}➡️</a>
     {{/if}}
 </footer>
-<script src='/socket.io/socket.io.js'></script>
 <script src='/js/productView.js'></script>

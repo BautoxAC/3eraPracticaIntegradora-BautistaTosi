@@ -59,7 +59,7 @@ export class AuthController {
   }
 
   getPerfil (req, res) {
-    const user = req.user
+    const user = req.session.user
     return res.json({ perfil: user })
   }
 

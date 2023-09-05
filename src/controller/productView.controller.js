@@ -16,7 +16,7 @@ export class ProductViewController {
       email,
       urlCart: `http://localhost:${port}/carts/${cart}`,
       role,
-      userId: userId.data._id
+      userId: userId?.data?._id
     })
   }
 
