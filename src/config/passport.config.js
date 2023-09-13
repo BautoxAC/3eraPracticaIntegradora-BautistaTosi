@@ -93,7 +93,7 @@ export function iniPassPortLocalAndGithub () {
       {
         clientID,
         clientSecret,
-        callbackURL: `${url}/api/sessions/githubcallback`
+        callbackURL: `/api/sessions/githubcallback`
       },
       async (accesToken, _, profile, done) => {
         try {
