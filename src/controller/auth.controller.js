@@ -69,8 +69,9 @@ export class AuthController {
 
   sendEmail (req, res) {
     const { email } = req.body
-    const result = authServiceControlling.sendEmail(email)
-    return res.status(200).json(result)
+    const host = req.get('host')
+    authServiceControlling.sendEmail(email, host)
+    return res.send('email enviado correctamente')
   }
 
   renderRecover (req, res) {

@@ -10,7 +10,7 @@ import { CodeManagerDBDAO } from '../DAO/DB/codeManagerDB.dao.js'
 const UserManager = new UserManagerDBDAO()
 const CodeManager = new CodeManagerDBDAO()
 export class AuthService {
-  async sendEmail (email) {
+  async sendEmail (email, host) {
     try {
       const expire = new Date()
       const code = await CodeManager.createCode(email, uuidv4(), expire.getTime() + 3600000)
@@ -21,7 +21,7 @@ export class AuthService {
         html: `
             <div>
               <h1>Aqui esta el link para que puedas restablecer tu cantraseña</h1>
-              <a href="http://localhost:${config.port}/auth/passrecover?code=${code.stringCode}&email=${email}">Click aqui<a/>
+              <a href="http://${host}/auth/passrecover?code=${code.stringCode}&email=${email}">Click aqui<a/>
             </div>
             `
       })

@@ -92,10 +92,10 @@ export class ProductManagerDBService {
     }
   }
 
-  async getProducts (limit, page, query, sort, url) {
+  async getProducts (limit, page, query, sort) {
     const res = (status, payload, restPaginate) => {
-      let prevLink = `${url}?limit=${limit || ''}&category=${query || ''}&sort=${sort || ''}&page=`
-      let nextLink = `${url}?limit=${limit || ''}&category=${query || ''}&sort=${sort || ''}&page=`
+      let prevLink = `/products?limit=${limit || ''}&category=${query || ''}&sort=${sort || ''}&page=`
+      let nextLink = `/products?limit=${limit || ''}&category=${query || ''}&sort=${sort || ''}&page=`
       restPaginate.hasPrevPage ? prevLink += restPaginate.prevPage : prevLink = null
       restPaginate.hasNextPage ? nextLink += restPaginate.nextPage : nextLink = null
       return {

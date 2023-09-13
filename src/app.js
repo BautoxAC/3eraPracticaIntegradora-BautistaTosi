@@ -27,6 +27,9 @@ const httpServer = app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`)
 })
 
+// Connect Mongo
+connectMongo()
+
 // CONFIG EXPRESS
 app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.static(path.join(__dirname, '/public/assets')))
@@ -36,7 +39,6 @@ app.use(express.urlencoded({ extended: true }))
 app.engine('handlebars', handlebars.engine())
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
-
 app.use(
   session({
     store: MongoStore.create({ mongoUrl, ttl: 7200 }),
@@ -53,9 +55,6 @@ app.use(passport.session())
 
 // Execute SocketSever in Rute /realtimeserver
 connectSocketServer(httpServer)
-
-// Connect Mongo
-connectMongo()
 
 // Rutes: API REST WITH JSON
 app.use('/api/products', productsAPIRouter)

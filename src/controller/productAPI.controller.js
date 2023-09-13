@@ -1,13 +1,10 @@
 import { ProductManagerDBService } from '../services/products.service.js'
 import { newMessage } from '../utils/utils.js'
-import config from './../config/env.config.js'
-const { port } = config
 const list = new ProductManagerDBService()
 export class ProductsAPIController {
   async getProducts (req, res) {
     const { limit, page, query, sort } = req.query
-    const url = `http://localhost:${port}/api/products`
-    return res.status(200).json(await list.getProducts(limit, page, query, sort, url))
+    return res.status(200).json(await list.getProducts(limit, page, query, sort))
   }
 
   async getProductById (req, res) {
@@ -32,7 +29,7 @@ export class ProductsAPIController {
   async newProduct (req, res) {
     const newProduct = req.body
     const owner = req.session.user.email
-    const imageUrl = `http://localhost:${port}/${req.file.originalname}`
+    const imageUrl = req.file.originalname
     await list.addProduct(newProduct.title, newProduct.description, newProduct.price, imageUrl, newProduct.code, newProduct.stock, newProduct.category, owner)
     return res.redirect('/products')
   }
