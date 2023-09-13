@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 import config from './env.config.js'
 import { EErros } from '../services/errors/enums.js'
 import { CustomError } from '../services/errors/custom-error.js'
+import fetch from 'node-fetch'
 const LocalStrategy = local.Strategy
 const { clientID, clientSecret, url } = config
 const cartManager = new CartManagerDBService()
