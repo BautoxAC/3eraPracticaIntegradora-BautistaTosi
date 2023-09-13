@@ -25,6 +25,7 @@ export function errorHandler (error, req, res, next) {
         .send({ status: 'error', error: error.name, cause: error.cause })
       break
     default:
+      console.log(error)
       res.send({ status: 'error', error: 'Unhandled error' })
       break
   }
