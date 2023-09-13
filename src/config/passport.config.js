@@ -9,7 +9,7 @@ import config from './env.config.js'
 import { EErros } from '../services/errors/enums.js'
 import { CustomError } from '../services/errors/custom-error.js'
 const LocalStrategy = local.Strategy
-const { clientID, clientSecret } = config
+const { clientID, clientSecret, url } = config
 const cartManager = new CartManagerDBService()
 // ---------------- GITHUB PASSPORT ----------------
 export function iniPassPortLocalAndGithub () {
@@ -92,7 +92,7 @@ export function iniPassPortLocalAndGithub () {
       {
         clientID,
         clientSecret,
-        callbackURL: '/api/sessions/githubcallback'
+        callbackURL: `${url}/api/sessions/githubcallback`
       },
       async (accesToken, _, profile, done) => {
         try {

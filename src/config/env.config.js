@@ -16,5 +16,6 @@ export default {
   port: process.env.PORT,
   logWinston: process.env.LOG_WINSTON,
   mailSender: process.env.GOOGLE_EMAIL,
-  passMailSender: process.env.GOOGLE_PASS
+  passMailSender: process.env.GOOGLE_PASS,
+  url: process.env.URL
 }
