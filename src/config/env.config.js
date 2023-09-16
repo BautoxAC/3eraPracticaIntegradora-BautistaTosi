@@ -17,5 +17,5 @@ export default {
   logWinston: process.env.LOG_WINSTON,
   mailSender: process.env.GOOGLE_EMAIL,
   passMailSender: process.env.GOOGLE_PASS,
-  url: process.env.URL
+  url: process.env.URL || 'http://localhost:8080'
 }
